@@ -4,21 +4,10 @@ import { NextResponse } from "next/server";
 
 export async function PUT(request, { params }) {
   const { id } = params;
-  try {
-    const { newTitle: title, newDescription: description } = await request.json();
-    
-    await connectMongoDB();
-    const updatedTopic = await Topic.findByIdAndUpdate(id, { title, description });
-
-    if (!updatedTopic) {
-      return NextResponse.json({ message: "Topic not found" }, { status: 404 });
-    }
-
-    return NextResponse.json({ message: "Topic updated" }, { status: 200 });
-  } catch (error) {
-    console.error("Error updating topic:", error);
-    return NextResponse.json({ message: "Error updating topic" }, { status: 500 });
-  }
+  const { newTitle: title, newDescription: description } = await request.json();
+  await connectMongoDB();
+  await Topic.findByIdAndUpdate(id, { title, description });
+  return NextResponse.json({ message: "Topic Updated " }, { status: 200 });
 }
 
 export async function GET(request,{params}){
